@@ -390,7 +390,8 @@ namespace Raven.Storage.Managed
 													   "' using a non current etag")
 						{
 							ActualETag = etag.Value,
-							ExpectedETag = existingEtag
+							ExpectedETag = existingEtag,
+                            Key = key
 						};
 					}
 				}
@@ -401,7 +402,8 @@ namespace Raven.Storage.Managed
 				throw new ConcurrencyException("PUT attempted on document '" + key +
 											   "' using a non current etag (document deleted)")
 				{
-					ExpectedETag = etag.Value
+					ExpectedETag = etag.Value,
+                    Key=key
 				};
 
 			readResult = storage.DocumentsModifiedByTransactions.Read(new RavenJObject { { "key", key } });

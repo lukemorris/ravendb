@@ -37,7 +37,8 @@ namespace Raven.Storage.Esent.StorageActions
 						"' using a non current etag")
 					{
 						ActualETag = existingEtag,
-						ExpectedETag = etag.Value
+						ExpectedETag = etag.Value,
+                        Key = key
 					};
 				}
 			}
@@ -100,7 +101,8 @@ namespace Raven.Storage.Esent.StorageActions
 					"' using a non current etag")
 				{
 					ActualETag = fileEtag,
-					ExpectedETag = etag.Value
+					ExpectedETag = etag.Value,
+                    Key = key
 				};
 			}
 

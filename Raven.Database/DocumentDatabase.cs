@@ -1672,6 +1672,7 @@ namespace Raven.Database
 						{
 							ActualETag = doc.Etag.Value,
 							ExpectedETag = etag.Value,
+                            Key = docId
 						};
 					}
 					else

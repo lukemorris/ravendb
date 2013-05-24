@@ -810,7 +810,8 @@ namespace Raven.Client.Connection
 				return new ConcurrencyException(errorResults.error)
 				{
 					ActualETag = errorResults.actualETag,
-					ExpectedETag = errorResults.expectedETag
+					ExpectedETag = errorResults.expectedETag,
+                    //Key = ?
 				};
 			}
 		}

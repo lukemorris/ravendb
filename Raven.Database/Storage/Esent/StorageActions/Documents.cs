@@ -405,7 +405,8 @@ namespace Raven.Storage.Esent.StorageActions
 					throw new ConcurrencyException("PUT attempted on document '" + key +
 												   "' using a non current etag (document deleted)")
 					{
-						ExpectedETag = etag.Value
+						ExpectedETag = etag.Value,
+                        Key = key
 					};
 				EnsureDocumentIsNotCreatedInAnotherTransaction(key, Guid.NewGuid());
 				if (Api.TryMoveFirst(session, Details))
@@ -625,7 +626,8 @@ namespace Raven.Storage.Esent.StorageActions
 											   "' using a non current etag")
 					{
 						ActualETag = Guid.Empty,
-						ExpectedETag = etag.Value
+						ExpectedETag = etag.Value,
+                        Key = key
 					};
 				}
 				logger.Debug("Document with key '{0}' was not found, and considered deleted", key);

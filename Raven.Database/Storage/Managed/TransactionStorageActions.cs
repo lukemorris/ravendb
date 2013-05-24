@@ -46,8 +46,11 @@ namespace Raven.Storage.Managed
 				var ravenJObject = ((RavenJObject)readResult.Key.CloneToken());
 				ravenJObject["txId"] = transactionInformation.Id.ToByteArray();
 				if (storage.Documents.UpdateKey(ravenJObject) == false)
-					throw new ConcurrencyException("PUT attempted on document '" + key +
-												   "' that is currently being modified by another transaction");
+                    throw new ConcurrencyException("PUT attempted on document '" + key +
+                                                   "' that is currently being modified by another transaction")
+                                                   {
+                                                       Key = key
+                                                   };
 			}
 			else
 			{
@@ -97,7 +100,8 @@ namespace Raven.Storage.Managed
 											   "' using a non current etag")
 				{
 					ActualETag = existingEtag,
-					ExpectedETag = etag.Value
+					ExpectedETag = etag.Value,
+                    Key=key
 				};
 			}
 		}
@@ -113,7 +117,8 @@ namespace Raven.Storage.Managed
 					                               "' using a non current etag")
 					{
 						ActualETag = Guid.Empty,
-						ExpectedETag = etag.Value
+						ExpectedETag = etag.Value,
+                        Key=key
 					};
 				}
 				return false;
@@ -126,8 +131,11 @@ namespace Raven.Storage.Managed
 			var ravenJObject = ((RavenJObject) nonTxResult.Key.CloneToken());
 			ravenJObject["txId"] = transactionInformation.Id.ToByteArray();
 			if (storage.Documents.UpdateKey(ravenJObject) == false)
-				throw new ConcurrencyException("DELETE attempted on document '" + key +
-				                               "' that is currently being modified by another transaction");
+                throw new ConcurrencyException("DELETE attempted on document '" + key +
+                                               "' that is currently being modified by another transaction")
+                                               {
+                                                   Key = key
+                                               };
 
 			storage.Transactions.UpdateKey(new RavenJObject
 			{

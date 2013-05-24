@@ -38,7 +38,8 @@ namespace Raven.Storage.Esent.StorageActions
 											   "' using a non current etag")
 				{
 					ActualETag = existingEtag,
-					ExpectedETag = etag.Value
+					ExpectedETag = etag.Value,
+                    Key = key
 				};
 			}
 			return existingEtag;
@@ -85,7 +86,10 @@ namespace Raven.Storage.Esent.StorageActions
 					return;
 				}
 
-				throw new ConcurrencyException("A document with key: '" + key + "' is currently created in another transaction");
+			    throw new ConcurrencyException("A document with key: '" + key + "' is currently created in another transaction")
+			    {
+                    Key = key
+			    };
 			}
 		}
 
@@ -158,7 +162,10 @@ namespace Raven.Storage.Esent.StorageActions
 				Api.JetGotoBookmark(session, Documents, bookmark, bookmark.Length);
 				return;
 			}
-			throw new ConcurrencyException("Document '" + key + "' is locked by transaction: " + guid);
+		    throw new ConcurrencyException("Document '" + key + "' is locked by transaction: " + guid)
+		    {
+                Key = key
+		    };
 		}
 	}
 }

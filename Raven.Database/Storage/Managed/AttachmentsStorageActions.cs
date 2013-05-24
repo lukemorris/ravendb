@@ -73,7 +73,8 @@ namespace Raven.Storage.Managed
 												   "' using a non current etag")
 					{
 						ActualETag = existingEtag,
-						ExpectedETag = etag.Value
+						ExpectedETag = etag.Value,
+                        Key = key
 					};
 				}
 			}
@@ -84,8 +85,11 @@ namespace Raven.Storage.Managed
 			AssertValidEtag(key, etag, "DELETE");
 
 			if (!storage.Attachments.Remove(new RavenJObject { { "key", key } }))
-				throw new ConcurrencyException("DELETE attempted on attachment '" + key +
-											   "'  while it was locked by another transaction");
+                throw new ConcurrencyException("DELETE attempted on attachment '" + key +
+                                               "'  while it was locked by another transaction")
+                                               {
+                                                   Key = key
+                                               };
 			logger.Debug("Attachment with key '{0}' was deleted", key);
 		}
 
